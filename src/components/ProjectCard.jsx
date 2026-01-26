@@ -1,64 +1,74 @@
-import { Card, Button, Modal, Tag } from "antd";
+import { Button, Progress, Popconfirm } from "antd";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
-import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const ProjectCard = ({ project, onEdit, onDelete }) => {
-  const [confirmOpen, setConfirmOpen] = useState(false);
+  const navigate = useNavigate();
 
-  const confirmDelete = () => {
-    onDelete(project.id);
-    setConfirmOpen(false);
-  };
+  const percent =
+    project.total_tasks > 0
+      ? Math.round((project.completed_tasks / project.total_tasks) * 100)
+      : 0;
 
   return (
-    <>
-      <Card
-        className="project-card"
-        hoverable
-        variant="borderless"
+    <div
+      className="project-card"
+      onClick={() => navigate(`/projects/${project.id}/tasks`)}
+    >
+      {/* Domain badge */}
+      <div className="project-domain">{project.domain}</div>
+
+      {/* Title */}
+      <h3 className="project-title">{project.name}</h3>
+
+      {/* Description */}
+      <p className="project-description">
+        {project.description || "No description provided"}
+      </p>
+
+      {/* Progress */}
+      <div className="project-progress">
+        <Progress
+          percent={percent}
+          size="small"
+          strokeColor="#52c41a"
+          showInfo={false}
+        />
+        <span className="progress-text">
+          {project.completed_tasks}/{project.total_tasks} tasks completed
+        </span>
+      </div>
+
+      {/* Actions */}
+      <div
+        className="project-card-actions"
+        onClick={(e) => e.stopPropagation()} // 🔥 critical
       >
-        <div className="project-card-header">
-          <h4>{project.name}</h4>
-          <Tag color="blue">{project.domain}</Tag>
-        </div>
+        <Button
+          size="small"
+          icon={<EditOutlined />}
+          onClick={() => onEdit(project)}
+        >
+          Edit
+        </Button>
 
-        <p className="project-description">
-          {project.description || "No description provided"}
-        </p>
-
-        <div className="project-card-actions">
+        <Popconfirm
+          title="Delete project?"
+          description="This action cannot be undone."
+          okText="Delete"
+          cancelText="Cancel"
+          onConfirm={() => onDelete(project.id)}
+        >
           <Button
-            icon={<EditOutlined />}
-            onClick={() => onEdit(project)}
-          >
-            Edit
-          </Button>
-
-          <Button
+            size="small"
             danger
             icon={<DeleteOutlined />}
-            onClick={() => setConfirmOpen(true)}
           >
             Delete
           </Button>
-        </div>
-      </Card>
-
-      <Modal
-        open={confirmOpen}
-        title="Delete Project"
-        onCancel={() => setConfirmOpen(false)}
-        onOk={confirmDelete}
-        okText="Delete"
-        okButtonProps={{ danger: true }}
-      >
-        <p>
-          Are you sure you want to delete{" "}
-          <strong>{project.name}</strong>?
-        </p>
-        <p>This action cannot be undone.</p>
-      </Modal>
-    </>
+        </Popconfirm>
+      </div>
+    </div>
   );
 };
 

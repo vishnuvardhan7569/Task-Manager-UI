@@ -1,0 +1,125 @@
+.tasks-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 64px;
+    padding: 0 24px;
+    background: #ffffff;
+    border-bottom: 1px solid #eaeaea;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 1000;
+}  
+ 
+.tasks-toolbar {
+  position: sticky;
+  top: 64px;
+  width: 100vw;
+  padding: 16px 24px;
+  background: #ffffff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-sizing: border-box;
+  z-index: 900;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+/* GRID */
+.tasks-grid {
+  width: 100vw;
+  padding: 24px 24px 40px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  box-sizing: border-box;
+}
+
+/* EMPTY STATE */
+.tasks-empty {
+  grid-column: 1 / -1;
+  min-height: 40vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* TASK CARD */
+.task-card {
+  position: relative;
+  background: #f6ffed;
+  border: 1px solid #b7eb8f;
+  border-radius: 14px;
+  padding: 16px;
+  min-height: 230px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: default;
+}
+
+.task-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+}
+
+/* STATUS TAG */
+.task-status {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* TITLE */
+.task-title {
+  margin-top: 32px;
+  text-align: center;
+  font-size: 17px;
+  font-weight: 600;
+  color: #1f1f1f;
+}
+
+/* DESCRIPTION */
+.task-description {
+  font-size: 14px;
+  text-align: center;
+  line-height: 1.5;
+  color: #1f1f1f;
+  margin: 12px 0;
+
+  max-height: calc(1.5em * 3);
+  overflow: hidden;
+}
+
+/* ACTIONS */
+.task-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 1200px) {
+  .tasks-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 900px) {
+  .tasks-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .tasks-grid {
+    grid-template-columns: 1fr;
+  }
+}

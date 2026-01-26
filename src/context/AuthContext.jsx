@@ -39,7 +39,7 @@ export const AuthProvider = ({ children }) => {
     api.get("/me")
        .then((res) => setUser(res.data))
        .catch(() => message.error("Failed to load user"));
-    navigate("/projects");
+    navigate("/");
   };
 
   const logout = () => {
