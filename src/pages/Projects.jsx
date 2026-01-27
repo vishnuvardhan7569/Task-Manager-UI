@@ -1,10 +1,6 @@
 import { useEffect, useState } from "react";
 import { Button, Modal, Form, Input, message } from "antd";
-import {
-  PlusOutlined,
-  LogoutOutlined,
-  ExclamationCircleOutlined,
-} from "@ant-design/icons";
+import { PlusOutlined, LogoutOutlined, ExclamationCircleOutlined } from "@ant-design/icons";
 import api from "../api/api";
 import ProjectCard from "../components/ProjectCard";
 import { useAuth } from "../context/AuthContext";
@@ -19,7 +15,6 @@ const Projects = () => {
   const [editingProject, setEditingProject] = useState(null);
   const [form] = Form.useForm();
 
-  /* ================= FETCH PROJECTS ================= */
   useEffect(() => {
     api
       .get("/projects")
@@ -27,7 +22,6 @@ const Projects = () => {
       .catch(() => message.error("Failed to load projects"));
   }, []);
 
-  /* ================= CREATE / EDIT ================= */
   const openCreate = () => {
     setEditingProject(null);
     form.resetFields();
@@ -67,7 +61,6 @@ const Projects = () => {
     }
   };
 
-  /* ================= DELETE (CONFIRM) ================= */
   const deleteProject = (id) => {
     confirm({
       title: "Delete this project?",
@@ -92,7 +85,6 @@ const Projects = () => {
 
   return (
     <>
-      {/* ================= HEADER ================= */}
       <header className="projects-header">
         <div className="header-left">Projects</div>
         <div className="header-right">
@@ -107,7 +99,6 @@ const Projects = () => {
         </div>
       </header>
 
-      {/* ================= TOOLBAR ================= */}
       <section className="projects-toolbar">
         <h3>Choose ur projects</h3>
         <Button
@@ -119,7 +110,6 @@ const Projects = () => {
         </Button>
       </section>
 
-      {/* ================= PROJECT GRID ================= */}
       <section className="projects-grid">
         {projects.length === 0 ? (
           <div className="empty-projects">
@@ -141,13 +131,12 @@ const Projects = () => {
         )}
       </section>
 
-      {/* ================= MODAL ================= */}
       <Modal
         title={editingProject ? "Edit Project" : "Create Project"}
         open={open}
         footer={null}
         onCancel={() => setOpen(false)}
-        destroyOnClose
+        destroyOnHidden
       >
         <Form
           layout="vertical"

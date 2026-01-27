@@ -97,7 +97,6 @@ const Tasks = () => {
 
   return (
     <>
-      {/* HEADER */}
       <header className="projects-header">
         <div className="header-left">Tasks</div>
         <div className="header-right">
@@ -112,15 +111,13 @@ const Tasks = () => {
         </div>
       </header>
 
-      {/* TOOLBAR */}
-      <section className="tasks-toolbar" style={{ marginTop: 70 }}>
+      <section className="tasks-toolbar">
         <h3>Manage Tasks</h3>
         <Button type="primary" icon={<PlusOutlined />} onClick={openCreate}>
           Create Task
         </Button>
       </section>
 
-      {/* TASK GRID */}
       <section className="tasks-grid">
         {tasks.length === 0 ? (
           <Empty description="No tasks yet. Create one to get started." />
@@ -162,7 +159,6 @@ const Tasks = () => {
         )}
       </section>
 
-      {/* MODAL */}
       <Modal
         title={editingTask ? "Edit Task" : "Create Task"}
         open={open}

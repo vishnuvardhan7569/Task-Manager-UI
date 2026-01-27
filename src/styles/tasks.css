@@ -14,10 +14,10 @@
 }  
  
 .tasks-toolbar {
-  position: sticky;
+  position: fixed;
   top: 64px;
   width: 100vw;
-  padding: 16px 24px;
+  padding: 8px 40px;
   background: #ffffff;
   display: flex;
   justify-content: space-between;
@@ -27,7 +27,6 @@
   border-bottom: 1px solid #f0f0f0;
 }
 
-/* GRID */
 .tasks-grid {
   width: 100vw;
   padding: 24px 24px 40px;
@@ -37,7 +36,6 @@
   box-sizing: border-box;
 }
 
-/* EMPTY STATE */
 .tasks-empty {
   grid-column: 1 / -1;
   min-height: 40vh;
@@ -46,7 +44,6 @@
   justify-content: center;
 }
 
-/* TASK CARD */
 .task-card {
   position: relative;
   background: #f6ffed;
