@@ -8,7 +8,6 @@ import {
   Select,
   message,
   Tag,
-  Empty,
 } from "antd";
 import {
   PlusOutlined,
@@ -100,7 +99,7 @@ const Tasks = () => {
       <header className="projects-header">
         <div className="header-left">Tasks</div>
         <div className="header-right">
-          <span className="user-email">{user?.email}</span>
+          <span className="user-name">{user?.name}</span>
           <Button
             type="text"
             icon={<LogoutOutlined />}
@@ -120,7 +119,13 @@ const Tasks = () => {
 
       <section className="tasks-grid">
         {tasks.length === 0 ? (
-          <Empty description="No tasks yet. Create one to get started." />
+          <div className="tasks-empty">
+          <h3>No tasks yet</h3>
+          <p>Create a task to start tracking tasks</p>
+          <Button type="primary" onClick={openCreate}>
+            Create Task
+          </Button>
+        </div>
         ) : (
           tasks.map((task) => (
             <div className="task-card" key={task.id}>
@@ -178,9 +183,9 @@ const Tasks = () => {
             <TextArea rows={4} />
           </Form.Item>
 
-          <Form.Item name="status" label="Status" initialValue="pending">
+          <Form.Item name="status" label="Status" initialValue="not_started" placeholder="Not Started">
             <Select>
-              <Option value="pending">Pending</Option>
+              <Option value="not_started">Not Started</Option>
               <Option value="in_progress">In Progress</Option>
               <Option value="completed">Completed</Option>
             </Select>

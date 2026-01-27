@@ -39,6 +39,7 @@ export const AuthProvider = ({ children }) => {
     api.get("/me")
        .then((res) => setUser(res.data))
        .catch(() => message.error("Failed to load user"));
+
     navigate("/");
   };
 
@@ -54,9 +55,6 @@ export const AuthProvider = ({ children }) => {
     const interceptor = api.interceptors.response.use(
       (res) => res,
       (error) => {
-        if (error.response?.status === 401) {
-          logout();
-        }
         return Promise.reject(error);
       }
     );

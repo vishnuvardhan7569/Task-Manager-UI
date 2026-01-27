@@ -88,7 +88,7 @@ const Projects = () => {
       <header className="projects-header">
         <div className="header-left">Projects</div>
         <div className="header-right">
-          <span className="user-email">{user?.email}</span>
+          <span className="user-name">{user?.name}</span>
           <Button
             type="text"
             icon={<LogoutOutlined />}

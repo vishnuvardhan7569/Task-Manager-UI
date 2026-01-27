@@ -18,10 +18,19 @@ const Signup = () => {
   };
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh', width: '100vw', backgroundColor: '#f5f5f5' }}>
-      <Card title={<div style={{ textAlign: 'center' }}>Create Account</div>} style={{ width: 450, boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}>
+    <div style={{ display: 'flex',
+                  justifyContent: 'center', 
+                  alignItems: 'center', 
+                  minHeight: '100vh', 
+                  width: '100vw', 
+                  backgroundColor: '#f5f5f5' 
+                }}>
+      <Card title= "Create Account" style={{ textAlign: 'center', width: 450, boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}>
 
         <Form form={form} name="signup" onFinish={onFinish} layout="vertical">
+          <Form.Item name="name" label="Name" rules={[{ type: 'text', required: true }]}>
+            <Input placeholder="Enter a name" />
+          </Form.Item>
           <Form.Item name="email" label="E-mail" rules={[{ type: 'email', required: true }]}>
             <Input placeholder="example@mail.com" />
           </Form.Item>
