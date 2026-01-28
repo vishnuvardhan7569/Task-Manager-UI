@@ -1,20 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import {
-  Button,
-  Modal,
-  Form,
-  Input,
-  Select,
-  message,
-  Tag,
-} from "antd";
-import {
-  PlusOutlined,
-  EditOutlined,
-  DeleteOutlined,
-  LogoutOutlined,
-} from "@ant-design/icons";
+import { Button, Modal, Form, Input, Select, message, Tag } from "antd";
+import { PlusOutlined, EditOutlined, DeleteOutlined, LogoutOutlined } from "@ant-design/icons";
 import api from "../api/api";
 import { useAuth } from "../context/AuthContext";
 import "../styles/tasks.css";
@@ -25,46 +12,59 @@ const { Option } = Select;
 const Tasks = () => {
   const { projectId } = useParams();
   const { user, logout } = useAuth();
-
-  const [tasks, setTasks] = useState([]);
-  const [open, setOpen] = useState(false);
-  const [editingTask, setEditingTask] = useState(null);
   const [form] = Form.useForm();
 
+  const [state, setState] = useState({
+    tasks: [],
+    open: false,
+    editingTask: null,
+  });
+
+  const { tasks, open, editingTask } = state;
+  const updateState = (updates) => {
+    setState((prev) => ({ ...prev, ...updates }));
+  };
+
+  const fetchTasks = async () => {
+    try {
+      const res = await api.get(`/projects/${projectId}/tasks`);
+      updateState({ tasks: res.data });
+    } catch (err) {
+      message.error("Failed to load tasks");
+    }
+  };
+  
   useEffect(() => {
-    api
-      .get(`/projects/${projectId}/tasks`)
-      .then((res) => setTasks(res.data))
-      .catch(() => message.error("Failed to load tasks"));
-  }, [projectId]);
+    fetchTasks();
+  }, [projectId]);  
 
   const openCreate = () => {
-    setEditingTask(null);
     form.resetFields();
-    setOpen(true);
+    updateState({ editingTask: null, open: true });
   };
 
   const openEdit = (task) => {
-    setEditingTask(task);
     form.setFieldsValue(task);
-    setOpen(true);
+    updateState({ editingTask: task, open: true});
   };
 
   const handleSubmit = async (values) => {
     try {
-      let res;
       if (editingTask) {
-        res = await api.patch(`/tasks/${editingTask.id}`, values);
-        setTasks((prev) =>
-          prev.map((t) => (t.id === editingTask.id ? res.data : t))
-        );
+        const res = await api.patch(`/tasks/${editingTask.id}`, values);
+        updateState({
+          tasks: tasks.map((t) => (t.id === editingTask.id ? res.data : t)),
+          open: false
+        });
         message.success("Task updated");
       } else {
-        res = await api.post(`/projects/${projectId}/tasks`, values);
-        setTasks((prev) => [res.data, ...prev]);
+        const res = await api.post(`/projects/${projectId}/tasks`, values);
+        updateState({
+          tasks: [res.data, ...tasks],
+          open: false
+        });
         message.success("Task created");
       }
-      setOpen(false);
     } catch {
       message.error("Operation failed");
     }
@@ -79,7 +79,7 @@ const Tasks = () => {
       onOk: async () => {
         try {
           await api.delete(`/tasks/${id}`);
-          setTasks((prev) => prev.filter((t) => t.id !== id));
+          updateState({tasks: tasks.filter ((t)=>t.id !== id)});
           message.success("Task deleted");
         } catch {
           message.error("Delete failed");
@@ -99,7 +99,7 @@ const Tasks = () => {
       <header className="projects-header">
         <div className="header-left">Tasks</div>
         <div className="header-right">
-          <span className="user-name">{user?.name}</span>
+          <span className="user-name">{user?.email}</span>
           <Button
             type="text"
             icon={<LogoutOutlined />}
@@ -168,7 +168,8 @@ const Tasks = () => {
         title={editingTask ? "Edit Task" : "Create Task"}
         open={open}
         footer={null}
-        onCancel={() => setOpen(false)}
+        onCancel={() => updateState({open: false})}
+        destroyOnHidden
       >
         <Form layout="vertical" form={form} onFinish={handleSubmit}>
           <Form.Item

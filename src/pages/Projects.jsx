@@ -10,52 +10,54 @@ const { confirm } = Modal;
 
 const Projects = () => {
   const { user, logout } = useAuth();
-  const [projects, setProjects] = useState([]);
-  const [open, setOpen] = useState(false);
-  const [editingProject, setEditingProject] = useState(null);
+  console.log("DEBUG: Full user object:", user);
   const [form] = Form.useForm();
+  const [state, setState] = useState({
+    projects: [],
+    open: false,
+    editingProject: null,
+  });
+
+  const { projects, open, editingProject } = state;
+
+  const updateState=(updates)=>{
+    setState((prev)=>({...prev, ...updates}));
+  };
 
   useEffect(() => {
     api
       .get("/projects")
-      .then((res) => setProjects(res.data))
+      .then((res) => updateState({ projects: res.data })) 
       .catch(() => message.error("Failed to load projects"));
   }, []);
 
-  const openCreate = () => {
-    setEditingProject(null);
+  function openCreate() {
     form.resetFields();
-    setOpen(true);
-  };
+    updateState({ editingProject: null, open: true });
+  }
 
-  const openEdit = (project) => {
-    setEditingProject(project);
+  function openEdit(project) {
     form.setFieldsValue(project);
-    setOpen(true);
-  };
+    updateState({ editingProject: project, open: true });
+  }
 
   const handleSubmit = async (values) => {
     try {
-      let res;
-
-      if (editingProject) {
-        res = await api.patch(
-          `/projects/${editingProject.id}`,
-          values
-        );
-        setProjects((prev) =>
-          prev.map((p) =>
-            p.id === editingProject.id ? res.data : p
-          )
-        );
+      if (state.editingProject) {
+        const res = await api.patch(`/projects/${state.editingProject.id}`,values);
+        updateState({
+          projects: state.projects.map((p) => (p.id === state.editingProject.id ? res.data : p)),
+          open: false
+        });
         message.success("Project updated");
       } else {
-        res = await api.post("/projects", values);
-        setProjects((prev) => [...prev, res.data]);
+        const res = await api.post("/projects", values);
+        updateState({
+          projects: [...state.projects, res.data],
+          open: false
+        });
         message.success("Project created");
       }
-
-      setOpen(false);
     } catch {
       message.error("Operation failed");
     }
@@ -72,9 +74,7 @@ const Projects = () => {
       onOk: async () => {
         try {
           await api.delete(`/projects/${id}`);
-          setProjects((prev) =>
-            prev.filter((p) => p.id !== id)
-          );
+          updateState({ projects: state.projects.filter((p) => p.id !== id) });
           message.success("Project deleted");
         } catch {
           message.error("Delete failed");
@@ -88,7 +88,7 @@ const Projects = () => {
       <header className="projects-header">
         <div className="header-left">Projects</div>
         <div className="header-right">
-          <span className="user-name">{user?.name}</span>
+          <span className="user-name">{user?.email}</span>
           <Button
             type="text"
             icon={<LogoutOutlined />}
@@ -135,8 +135,9 @@ const Projects = () => {
         title={editingProject ? "Edit Project" : "Create Project"}
         open={open}
         footer={null}
-        onCancel={() => setOpen(false)}
+        onCancel={() => updateState({open: false})}
         destroyOnHidden
+        preserve={false}
       >
         <Form
           layout="vertical"

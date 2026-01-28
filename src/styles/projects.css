@@ -46,6 +46,7 @@
 
 .projects-grid {
   width: 100vw;
+  margin-top: 180px;
   padding: 24px 24px 40px;
   box-sizing: border-box;
   display: grid;
