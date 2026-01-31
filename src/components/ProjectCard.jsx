@@ -5,8 +5,9 @@ import { useNavigate } from "react-router-dom";
 const ProjectCard = ({ project, onEdit, onDelete }) => {
   const navigate = useNavigate();
 
-  const percent =
-    project.total_tasks >= 0 ? Math.round((project.completed_tasks / project.total_tasks) * 100) : 0;
+  const percent = Number(project.percent) || 0;
+  const completedTasks = Number(project.completed_tasks) || 0;
+  const totalTasks = Number(project.total_tasks) || 0;
 
   return (
     <div
@@ -18,18 +19,21 @@ const ProjectCard = ({ project, onEdit, onDelete }) => {
       <h3 className="project-title">{project.name}</h3>
 
       <p className="project-description">
-        {project.description || "No description provided"}
+        {project.description || "No description provided for this project."}
       </p>
 
       <div className="project-progress">
         <Progress
           percent={percent}
           size="small"
-          strokeColor="#52c41a"
+          strokeColor={{
+            '0%': '#6366f1',
+            '100%': '#8b5cf6',
+          }}
           showInfo={false}
         />
         <span className="progress-text">
-          {project.completed_tasks}/{project.total_tasks} tasks completed
+          {completedTasks}/{totalTasks} tasks completed
         </span>
       </div>
 
@@ -46,11 +50,11 @@ const ProjectCard = ({ project, onEdit, onDelete }) => {
         </Button>
 
         <Button
-            size="small"
-            danger
-            icon={<DeleteOutlined />}
-            onClick={()=> onDelete(project.id)}
-          >
+          size="small"
+          danger
+          icon={<DeleteOutlined />}
+          onClick={() => onDelete(project.id)}
+        >
           Delete
         </Button>
       </div>
@@ -59,3 +63,4 @@ const ProjectCard = ({ project, onEdit, onDelete }) => {
 };
 
 export default ProjectCard;
+
