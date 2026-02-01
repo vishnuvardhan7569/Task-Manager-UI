@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect, useContext } from "react";
+import { createContext, useState, useEffect, useContext, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api/api";
 import { message } from "antd";
@@ -15,6 +15,7 @@ export const AuthProvider = ({ children }) => {
 
   const { token, user, loading } = state;
   const navigate = useNavigate();
+  const fetchUserRef = useRef(false);
 
   useEffect(() => {
     const checkSession = () => {
@@ -34,15 +35,25 @@ export const AuthProvider = ({ children }) => {
     return () => clearInterval(interval);
   }, []);
 
+  // Load token from localStorage on mount
   useEffect(() => {
     const savedToken = localStorage.getItem("token");
-
-    if (!savedToken) {
+    if (savedToken) {
+      setState((prev) => ({ ...prev, token: savedToken }));
+    } else {
       setState((prev) => ({ ...prev, loading: false }));
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!token) {
+      setState((prev) => ({ ...prev, loading: false, user: null }));
+      fetchUserRef.current = false;
       return;
     }
 
-    setState((prev) => ({ ...prev, token: savedToken }));
+    if (fetchUserRef.current) return;
+    fetchUserRef.current = true;
 
     api
       .get("/me")
@@ -50,19 +61,15 @@ export const AuthProvider = ({ children }) => {
       .catch(() => {
         localStorage.removeItem("token");
         setState({ token: null, user: null, loading: false });
+        fetchUserRef.current = false;
       })
       .finally(() => setState((prev) => ({ ...prev, loading: false })));
-  }, []);
+  }, [token]);
 
   const login = (jwtToken) => {
     localStorage.setItem("token", jwtToken);
     localStorage.setItem("loginTime", Date.now());
     setState((prev) => ({ ...prev, token: jwtToken }));
-
-    api.get("/me")
-       .then((res) => setState((prev) => ({ ...prev, user: res.data })))
-       .catch(() => message.error("Failed to load user"));
-
     navigate("/");
   };
 

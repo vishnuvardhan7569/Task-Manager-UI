@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, Modal, Form, Input, message, Pagination } from "antd";
 import { PlusOutlined, ExclamationCircleOutlined } from "@ant-design/icons";
@@ -10,7 +10,6 @@ import "../styles/projects.css";
 const { confirm } = Modal;
 
 const Projects = () => {
-  const [form] = Form.useForm();
   const [state, setState] = useState({
     projects: [],
     open: false,
@@ -22,6 +21,7 @@ const Projects = () => {
 
   const { projects, open, editingProject, totalProjects, currentPage, pageSize } = state;
   const navigate = useNavigate();
+  const fetchProjectsRef = useRef(false);
 
   const fetchProjects = async (page = currentPage, limit = pageSize) => {
     try {
@@ -38,7 +38,11 @@ const Projects = () => {
     }
   };
 
-  useEffect(() => { fetchProjects(1, pageSize); }, []);
+  useEffect(() => {
+    if (fetchProjectsRef.current) return;
+    fetchProjectsRef.current = true;
+    fetchProjects(1, pageSize);
+  }, []);
 
   useEffect(() => {
     const handler = (e) => {
@@ -55,12 +59,10 @@ const Projects = () => {
   }, []);
 
   const openCreate = () => {
-    form.resetFields();
     setState((prev) => ({ ...prev, editingProject: null, open: true }));
   };
 
   const openEdit = (project) => {
-    form.setFieldsValue(project);
     setState((prev) => ({ ...prev, editingProject: project, open: true }));
   };
 
@@ -183,10 +185,9 @@ const Projects = () => {
           open={open}
           footer={null}
           onCancel={() => setState((prev) => ({ ...prev, open: false }))}
-          destroyOnHidden
-          preserve={false}
+          destroyOnClose
         >
-          <Form layout="vertical" form={form} onFinish={handleSubmit}>
+          <Form layout="vertical" onFinish={handleSubmit} initialValues={editingProject || {}}>
             <Form.Item name="name" label="Project Name" rules={[{ required: true, message: "Please enter project name" }]}>
               <Input placeholder="Enter project name" />
             </Form.Item>

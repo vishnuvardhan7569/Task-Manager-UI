@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Button, Modal, Form, Input, Select, message, Tag, Pagination } from "antd";
 import { PlusOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
@@ -11,8 +11,6 @@ const { TextArea } = Input;
 const Tasks = () => {
   const { projectId } = useParams();
   const navigate = useNavigate();
-  const [form] = Form.useForm();
-
   const [state, setState] = useState({
     tasks: [],
     open: false,
@@ -23,6 +21,7 @@ const Tasks = () => {
   });
 
   const { tasks, open, editingTask, totalTasks, currentPage, pageSize } = state;
+  const fetchTasksRef = useRef(false);
 
   const fetchTasks = async (page = currentPage, limit = pageSize) => {
     try {
@@ -39,7 +38,11 @@ const Tasks = () => {
     }
   };
 
-  useEffect(() => { if (projectId) fetchTasks(1, pageSize); }, [projectId]);
+  useEffect(() => {
+    if (fetchTasksRef.current) return;
+    fetchTasksRef.current = true;
+    if (projectId) fetchTasks(1, pageSize);
+  }, [projectId]);
 
   const statusOptions = [
     { value: "not_started", label: "Not Started" },
@@ -60,12 +63,10 @@ const Tasks = () => {
   };
 
   const openCreate = () => {
-    form.resetFields();
     setState((prev) => ({ ...prev, editingTask: null, open: true }));
   };
 
   const openEdit = (task) => {
-    form.setFieldsValue(task);
     setState((prev) => ({ ...prev, editingTask: task, open: true }));
   };
 
@@ -204,17 +205,16 @@ const Tasks = () => {
           open={open}
           footer={null}
           onCancel={() => setState((prev) => ({ ...prev, open: false }))}
-          destroyOnHidden
-          preserve={false}
+          destroyOnClose
         >
-          <Form layout="vertical" form={form} onFinish={handleSubmit}>
+          <Form layout="vertical" onFinish={handleSubmit} initialValues={editingTask || { status: "not_started" }}>
             <Form.Item name="title" label="Task Title" rules={[{ required: true, message: "Please enter task title" }]}>
               <Input placeholder="Enter task title" />
             </Form.Item>
             <Form.Item name="description" label="Task Description">
               <TextArea rows={4} placeholder="Describe the task..." />
             </Form.Item>
-            <Form.Item name="status" label="Status" initialValue="not_started">
+            <Form.Item name="status" label="Status">
               <Select options={statusOptions} />
             </Form.Item>
             <Button type="primary" block htmlType="submit">
