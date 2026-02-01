@@ -19,6 +19,12 @@
   font-weight: 600;
   color: #1e293b;
   flex-shrink: 0;
+  text-decoration: none;
+}
+
+.header-left:hover {
+  opacity: 0.8;
+  cursor: pointer;
 }
 
 .header-right {
@@ -48,7 +54,18 @@
   display: inline;
 }
 
-/* Responsive Design */
+.settings-link {
+  text-decoration: none;
+}
+
+.settings-link:hover {
+  opacity: 0.8;
+}
+
+.settings-text {
+  display: inline;
+}
+
 @media (max-width: 600px) {
   .projects-header {
     padding: 0 16px;
@@ -86,4 +103,3 @@
     font-size: 14px;
   }
 }
-

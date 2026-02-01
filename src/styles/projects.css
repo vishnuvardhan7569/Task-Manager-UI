@@ -1,4 +1,3 @@
-/* Projects Page Styles */
 .projects-main {
   padding-top: 84px;
   padding-bottom: 40px;
@@ -14,7 +13,6 @@
   box-sizing: border-box;
 }
 
-/* Toolbar - Buttons Row */
 .projects-toolbar {
   display: flex;
   justify-content: space-between;
@@ -23,7 +21,6 @@
   padding: 16px 0;
 }
 
-/* Hero Section */
 .projects-hero {
   display: flex;
   flex-direction: column;
@@ -92,7 +89,6 @@
   color: #64748b;
 }
 
-/* Project Card */
 .project-card {
   position: relative;
   background: linear-gradient(135deg, #e6f4ff 0%, #f0f9ff 100%);
@@ -145,11 +141,8 @@
   line-height: 1.6;
   color: #64748b;
   margin-bottom: 12px;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
+  max-height: 67px;
   overflow: hidden;
-  min-height: 0;
 }
 
 .project-progress {
@@ -167,7 +160,6 @@
   font-weight: 500;
 }
 
-/* Custom Progress Bar Styling */
 .project-progress .ant-progress-inner {
   background-color: #e2e8f0;
 }
@@ -177,7 +169,6 @@
   border-radius: 4px;
 }
 
-/* Card Actions */
 .project-card-actions {
   display: flex;
   justify-content: center;
@@ -192,7 +183,6 @@
   font-weight: 500;
 }
 
-/* Pagination */
 .projects-pagination {
   display: flex;
   justify-content: center;
@@ -209,7 +199,6 @@
   color: #6366f1;
 }
 
-/* Responsive Design */
 @media (max-width: 1200px) {
   .projects-grid {
     grid-template-columns: repeat(3, 1fr);
@@ -269,4 +258,3 @@
     min-height: 260px;
   }
 }
-

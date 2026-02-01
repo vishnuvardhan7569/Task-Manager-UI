@@ -89,7 +89,6 @@
   color: #64748b;
 }
 
-/* Task Card */
 .task-card {
   position: relative;
   background: linear-gradient(135deg, #e6f4ff 0%, #f0f9ff 100%);
@@ -157,9 +156,7 @@
   line-height: 1.5;
   color: #64748b;
   margin: 12px 0;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
+  max-height: 63px;
   overflow: hidden;
 }
 
@@ -177,7 +174,6 @@
   font-weight: 500;
 }
 
-/* Pagination */
 .tasks-pagination {
   display: flex;
   justify-content: center;
@@ -194,7 +190,6 @@
   color: #1677ff;
 }
 
-/* Responsive Design */
 @media (max-width: 1200px) {
   .tasks-grid {
     grid-template-columns: repeat(3, 1fr);
@@ -254,4 +249,3 @@
     min-height: 200px;
   }
 }
-

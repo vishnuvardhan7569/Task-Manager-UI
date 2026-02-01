@@ -63,4 +63,3 @@ const ProjectCard = ({ project, onEdit, onDelete }) => {
 };
 
 export default ProjectCard;
-

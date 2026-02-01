@@ -1,6 +1,7 @@
 import { Button, Form, Input, Select, Card, message } from 'antd';
 import { Link, useNavigate } from 'react-router-dom';
 import api from "../api/api";
+import "../styles/auth.css";
 
 const Signup = () => {
   const [form] = Form.useForm();
@@ -8,7 +9,7 @@ const Signup = () => {
 
   const onFinish = async (values) => {
     try {
-      await api.post('/signup', {user: values });
+      await api.post('/signup', { user: values });
       message.success('Registration successful! Please log in.');
       navigate('/login');
     } catch (error) {
@@ -18,17 +19,10 @@ const Signup = () => {
   };
 
   return (
-    <div style={{ display: 'flex',
-                  justifyContent: 'center', 
-                  alignItems: 'center', 
-                  minHeight: '100vh', 
-                  width: '100vw', 
-                  backgroundColor: '#f5f5f5' 
-                }}>
-      <Card title= "Create Account" style={{ textAlign: 'center', width: 450, boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}>
-
+    <div className="auth-page">
+      <Card title={<div className="auth-card-title">Create Account</div>} className="auth-card" style={{ width: 450 }}>
         <Form form={form} name="signup" onFinish={onFinish} layout="vertical">
-          <Form.Item name="name" label="Name" rules={[{ type: 'text', required: true }]}>
+          <Form.Item name="name" label="Name" rules={[{ required: true }]}>
             <Input placeholder="Enter a name" />
           </Form.Item>
           <Form.Item name="email" label="E-mail" rules={[{ type: 'email', required: true }]}>
@@ -58,7 +52,6 @@ const Signup = () => {
             </div>
           </Form.Item>
         </Form>
-        
       </Card>
     </div>
   );

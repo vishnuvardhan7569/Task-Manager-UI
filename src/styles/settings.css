@@ -1,0 +1,102 @@
+.settings-page {
+  padding-top: 84px;
+  padding-bottom: 40px;
+  min-height: calc(100vh - 84px);
+  background: #f8fafc;
+}
+
+.settings-container {
+  max-width: 600px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 0 24px;
+  box-sizing: border-box;
+}
+
+.settings-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 24px 0 0 0;
+  padding: 16px 0;
+}
+
+.settings-page h1 {
+  margin: 0 0 30px;
+  font-size: 24px;
+  font-weight: 600;
+  color: #1f2937;
+  text-align: center;
+}
+
+.settings-section {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  border: 1px solid #e5e7eb;
+}
+
+.settings-section h2 {
+  margin: 0 0 15px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.settings-section p {
+  margin: 0 0 15px;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.user-info p {
+  margin: 8px 0;
+  color: #374151;
+  font-size: 14px;
+}
+
+.danger button {
+  background: #dc2626;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.danger button:hover {
+  background: #b91c1c;
+}
+
+.delete-input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  margin-top: 10px;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.delete-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+}
+
+@media (max-width: 600px) {
+  .settings-container {
+    padding: 0 16px;
+  }
+
+  .settings-toolbar {
+    flex-direction: column;
+    gap: 12px;
+    align-items: stretch;
+  }
+
+  .settings-toolbar .ant-btn {
+    width: 100%;
+  }
+}

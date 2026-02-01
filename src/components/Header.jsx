@@ -1,7 +1,7 @@
-import React from "react";
+import { Link } from "react-router-dom";
 import "../styles/header.css";
 import { Button } from "antd";
-import { LogoutOutlined } from "@ant-design/icons";
+import { LogoutOutlined, SettingOutlined } from "@ant-design/icons";
 import { useAuth } from "../context/AuthContext";
 
 const Header = ({ title = "" }) => {
@@ -9,9 +9,15 @@ const Header = ({ title = "" }) => {
 
   return (
     <header className="projects-header">
-      <div className="header-left">{title}</div>
+      <Link to="/" className="header-left">{title}</Link>
 
       <div className="header-right">
+        <Link to="/settings" className="settings-link">
+          <Button type="text" icon={<SettingOutlined />}>
+            <span className="settings-text">Settings</span>
+          </Button>
+        </Link>
+
         <span className="user-name">{user?.name || user?.email}</span>
 
         <Button type="text" icon={<LogoutOutlined />} onClick={logout}>
